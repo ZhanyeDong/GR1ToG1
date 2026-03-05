@@ -52,4 +52,5 @@ if __name__ == '__main__':
     theta_list = torch.tensor([0.,  0., 0.,  0., 0., 0., 0.])
     DOF_7 = FK_7DOF()
     result = DOF_7.compute_fk(theta_list)
+
     print(result)
