@@ -237,7 +237,7 @@ def main(args):
             optimizer.step()  # 鏇存柊鎵€鏈夋搴?
             sum_loss = sum_loss + loss.item()
         num_sum_list.append(sum_loss)
-        print('sum_loss:', sum_loss)
+        print('epochs:',epoch,'sum_loss:', sum_loss)
         scheduler.step()
     # torch.save(sevenD_joint3_list, "./sevenD_joint3_list.pt")
 
@@ -306,4 +306,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
+
 
