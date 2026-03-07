@@ -165,7 +165,7 @@ def main(args):
 
     model = MLP_self(7, 32, 64, 64, 32, 7).to(device)
     optimizer = torch.optim.Adagrad(model.parameters(), lr=args.learning_rate, weight_decay=0.0)
-    scheduler = StepLR(optimizer, step_size=100, gamma=0.95)
+    scheduler = StepLR(optimizer, step_size=100, gamma=0.98)
 
     epochs = args.epochs
     num_sum_list = []
