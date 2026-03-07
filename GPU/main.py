@@ -77,7 +77,7 @@ def calculate_IK_loss(
     G1_position, G1_orientation,
     w_pos=3.0,
     w_ori=1.0,
-    w_dir=0.002,
+    w_dir=0.001,
 ):
     v_gr1_13 = GR1_joint3 - GR1_joint1
     v_gr1_34 = GR1_joint4 - GR1_joint3
