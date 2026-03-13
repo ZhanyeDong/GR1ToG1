@@ -15,7 +15,7 @@ class FK_7DOF:
             dtype=self.dtype,
         )
         self.T00 = torch.tensor(
-            [[0., -0.275, 0.961, 0.15596], [1., 0., 0., -0.0025], [0., 0.961, 0.275, -0.07], [0., 0., 0., 1.]],
+            [[0., -0.275, 0.961, 0.15596], [1., 0., 0., -0.0025], [0., 0.961, 0.275, -0.1], [0., 0., 0., 1.]],
             device=self.device,
             dtype=self.dtype,
         )
@@ -60,7 +60,7 @@ class FK_7DOF:
         position_7dof = T7[:, 0:3, 3]
         orientation_7dof = T7[:, 0:3, 0:3]
         joint3_7dof = T3[:, 0:3, 3]
-        joint4_7dof = T5[:, 0:3, 3]
+        joint4_7dof = T7[:, 0:3, 3]
 
         if squeeze_out:
             return (
@@ -99,4 +99,5 @@ if __name__ == '__main__':
     theta_list = torch.tensor([0.,0.,  0., 0., 0., 0., 0.])
     DOF_7 = FK_7DOF()
     result = DOF_7.compute_fk(theta_list)
+
     print(result)
