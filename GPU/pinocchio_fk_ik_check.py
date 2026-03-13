@@ -309,8 +309,8 @@ def estimate_base_alignment(
 
 
 def example(q_right_gr1):
-    urdf_g1 = "g1/urdf/g1_29dof.urdf"
-    urdf_gr1 = "gr1/urdf/GR1T2.urdf"
+    urdf_g1 = "g1_29dof.urdf"
+    urdf_gr1 = "GR1T2.urdf"
 
     g1_right_arm = [
         "right_shoulder_pitch_joint",
