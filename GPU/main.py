@@ -196,7 +196,6 @@ def main(args):
 
     model = MLP_self(7, 32, 64, 64, 32, 7).to(device)
     optimizer = torch.optim.Adagrad(model.parameters(), lr=args.learning_rate, weight_decay=0.0)
-    scheduler = StepLR(optimizer, step_size=100, gamma=0.99)
 
     epochs = args.epochs
     num_sum_list = []
@@ -236,7 +235,6 @@ def main(args):
         epoch_mean_loss = sum_loss / train_size
         num_sum_list.append(epoch_mean_loss)
         print('epoch:', epoch, 'loss:', epoch_mean_loss)
-        scheduler.step()
 
     model.eval()
     test_tensor = torch.stack(test_num)
