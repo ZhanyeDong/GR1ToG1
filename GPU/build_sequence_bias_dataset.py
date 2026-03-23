@@ -4,16 +4,9 @@ from typing import Iterable, List
 
 import torch
 
-from pinocchio_fk_ik_check import example
+from pinocchio_fk_ik_check import get_example_checker
 
 
-def filter_dataset_by_example(dataset: torch.Tensor) -> torch.Tensor:
-    keep = []
-    for i in range(dataset.shape[0]):
-        q_right_gr1 = dataset[i].detach().cpu().numpy()
-        ok = example(q_right_gr1)
-        keep.append(ok)
-    return dataset[torch.as_tensor(keep, dtype=torch.bool)]
 
 
 def to_nx7_tensor(data) -> torch.Tensor:
@@ -97,30 +90,33 @@ def main():
         type=str,
         nargs="+",
         default=[
-            "train_list1.pt",
-            "train_list2.pt",
-            "train_list3.pt",
-            "train_list4.pt",
-            "train_list5.pt",
+            "action_list0126_1.pt",
+            "action_list0126_2.pt",
+            "action_list0126_3.pt",
+            "action_list0126_4.pt",
+            "action_list0126_5.pt",
+            "action_list0305_5.pt",
+            "action_list0305_6.pt",
+            "action_list0318_1.pt",
         ],
         help="Input sequence files (.pt).",
     )
     parser.add_argument(
         "--output",
         type=str,
-        default="train_dataset_seq_bias.pt",
+        default="train_dataset_0322.pt",
         help="Output training tensor path (.pt).",
     )
     parser.add_argument(
         "--bias_abs",
         type=str,
-        default="0.15",
+        default="0.2",
         help="One value (all joints) or 7 comma values, e.g. 0.05 or 0.03,0.03,0.04,0.05,0.05,0.05,0.06",
     )
     parser.add_argument(
         "--target_samples",
         type=int,
-        default=300000,
+        default=1000000,
         help="If > 0, force final output to exactly this sample count.",
     )
     # bias_mode is fixed to "sample"
@@ -137,6 +133,7 @@ def main():
     target_n = int(args.target_samples) if args.target_samples > 0 else None
     dataset_samples: List[torch.Tensor] = []
     round_idx = 0
+    checker = get_example_checker()
     while target_n is None or len(dataset_samples) < target_n:
         round_idx += 1
         added_this_round = 0
@@ -158,9 +155,13 @@ def main():
                 blocks = (biased_sequence,)
 
             for block in blocks:
+                if isinstance(block, torch.Tensor):
+                    block_cpu = block.detach().cpu().numpy()
+                else:
+                    block_cpu = block
                 for i in range(block.shape[0]):
-                    q_right_gr1 = block[i].detach().cpu().numpy()
-                    if example(q_right_gr1):
+                    q_right_gr1 = block_cpu[i]
+                    if checker.check(q_right_gr1):
                         dataset_samples.append(block[i])
                         added_this_round += 1
                         if target_n is not None and len(dataset_samples) >= target_n:
